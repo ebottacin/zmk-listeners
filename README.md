@@ -90,6 +90,36 @@ Each listener is defined as a child node.
 - `layers` (optional): A list of layers to which this listener should apply.
 - `bindings` (required): The first behavior is triggered on key press, and the second on key release. Use `&none` for the other if you need only one. Second binding (key release) can be omitted if not needed.
 
+## USB HID LED Listeners
+
+```c
+#include <dt-bindings/zmk/hid_usage.h>
+
+/ {
+    hid_listeners {
+        compatible = "zmk,hid-listeners";
+
+        // Call &haptic_feedback_led_on when caps lock led enables, and &haptic_feedback_led_off when caps lock disables
+        caps_feedback {           
+            indicator = <HID_USAGE_LED_CAPS_LOCK>;
+            bindings = <&haptic_feedback_led_on &haptic_feedback_led_off>;
+        };
+    };
+}
+```
+
+### Root properties
+
+- `tap-ms`: The time to wait (in milliseconds) between the press and release events of a triggered behavior. Defaults to 5 ms.
+- `wait-ms`: The time to wait (in milliseconds) before triggering the next listener. Defaults to 5 ms.
+
+### Listener Properties
+
+Each listener is defined as a child node.
+
+- `indicator` (required): A constant from `dt-binding/zmk/hid_usage.h` representing either the NUM LOCK, CAPS LOCK, SCROLL LOCK, KANA, or COMPOSE LED state. These are the only USB HID LED states emitted by the underlying ZMK event.
+- `bindings` (required): The first behavior is triggered on key press, and the second on key release. Use `&none` for the other if you need only one. Second binding (key release) can be omitted if not needed.
+
 ## References
 
 - [elpekenin/zmk-userspace](https://github.com/elpekenin/zmk-userspace) - Same thing with a different implementation and API.
